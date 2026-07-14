@@ -1,0 +1,33 @@
+class Solution {
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        List<String> result = new ArrayList<>();
+        HashSet<String> dict = new HashSet<>();
+        for(String w : words){
+            dict.add(w);
+        }
+        for(String w : words){
+            if(w.isEmpty()){
+                continue ;
+            }
+            dict.remove(w);
+            if(check(w,dict)){
+                result.add(w);
+            }
+            dict.add(w);
+        }
+        return result;
+    }
+    private boolean check(String word,HashSet<String> dict){
+        if(dict.contains(word)){
+            return true;
+        }
+        for(int i= 1;i < word.length();i++){
+            String left = word.substring(0,i);
+            String right = word.substring(i);
+            if(dict.contains(left) && check(right,dict)){
+                return true;
+            }      
+              }
+              return false;
+    }
+}
