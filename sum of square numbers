@@ -1,0 +1,16 @@
+class Solution {
+    public boolean judgeSquareSum(int c) {
+        long a = 0;
+        long b = c;
+        while (a <= b) {
+            long currentSum = (a * a) + (b * b);
+            if (currentSum == c) {
+                return true; 
+            } else if (currentSum < c) {
+                a++; 
+                b--; 
+            }
+        }
+        return false;
+    }
+}
