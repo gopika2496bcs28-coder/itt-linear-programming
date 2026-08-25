@@ -1,0 +1,60 @@
+#include <stdlib.h>
+
+// Helper function to perform merge sort and count valid ranges
+int mergeSortAndCount(long long* prefix, int left, int right, int lower, int upper, long long* temp) {
+    // Base case: if the range contains 0 or 1 element, no crossing pairs exist
+    if (right - left <= 1) {
+        return 0;
+    }
+    
+    int mid = left + (right - left) / 2;
+    
+    // Step 1: Recursively count inside left and right halves
+    int count = mergeSortAndCount(prefix, left, mid, lower, upper, temp) +
+                mergeSortAndCount(prefix, mid, right, lower, upper, t  
+    // Step 2: Count valid crossing pairs where left element is in prefix[left..mid-1] 
+    int m = mid;
+    int n = mid;
+    for (int i = left; i < mid; i++) {
+        while (m < right && prefix[m] - prefix[i] < lower) {
+            m++;
+        }
+        while (n < right && prefix[n] - prefix[i] <= upper) {
+            n++;
+        }
+        count += (n - m);
+    }
+    int i = left, j = mid, k = left;
+    while (i < mid && j < right) {
+        if (prefix[i] <= prefix[j]) {
+            temp[k++] = prefix[i++];
+        } else {
+            temp[k++] = prefix[j++];
+        }
+    }
+    while (i < mid) {
+        temp[k++] = prefix[i++];
+    }
+    while (j < right) {
+        temp[k++] = prefix[j++];
+    }
+    for (i = left; i < right; i++) {
+        prefix[i] = temp[i];
+    }   
+    return count;
+}
+int countRangeSum(int* nums, int numsSize, int lower, int upper) {
+    if (numsSize == 0) return 0;
+    long long* prefix = (long long*)malloc((numsSize + 1) * sizeof(long long));
+    prefix[0] = 0;
+    for (int i = 0; i < numsSize; i++) {
+        prefix[i + 1] = prefix[i] + nums[i];
+    }
+    long long* temp = (long long*)malloc((numsSize + 1) * sizeof(long long));
+    int totalCount = mergeSortAndCount(prefix, 0, numsSize + 1, lower, upper, temp);
+    free(prefix);
+    free(temp);
+    return totalCount;
+}
+
+    
