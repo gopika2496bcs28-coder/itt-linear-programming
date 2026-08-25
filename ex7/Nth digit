@@ -1,0 +1,25 @@
+int pwr(int base, int exponent) {
+    int res = 1;
+    while(exponent) {
+        res *= base;
+        --exponent;
+    }
+    return res;
+}
+
+int f(int n, int digits) {
+    int m = (int)ceil((float)n / digits);
+    int p = pwr(10, (digits - 1)) + m - 1;
+    int rem = n % digits;
+    if(rem == 0) rem += digits;
+    return p / pwr(10, (digits - rem)) % 10;
+
+}
+int findNthDigit(int n) {
+    int digits = 1;
+    while (n > (long long)digits * 9 * pwr(10, (digits - 1))) {
+        n -= digits * 9 * pwr(10, (digits - 1));
+        ++digits;
+    }
+    return f(n, digits);
+}
