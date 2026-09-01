@@ -1,0 +1,9 @@
+struct ListNode* swapPairs(struct ListNode* head) {
+    struct ListNode *c = head, *p = NULL, *h = c && c->next ? c->next : c, *n;
+    for (; c ; p = c, c = n) {
+        n = c->next ? c->next->next : NULL;
+        c->next && (c->next->next = c);
+        p && (p->next = c->next ? c->next : c);
+    }
+    return p && p->next && (p->next = NULL), h;
+}
