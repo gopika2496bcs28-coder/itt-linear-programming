@@ -1,0 +1,19 @@
+class Solution {
+    public int countArrays(int[] original, int[][] bounds) {
+        int low = bounds[0][0];
+        int high = bounds[0][1];
+        
+        for (int i = 1; i < original.length; i++) {
+            int shift = original[i] - original[0];
+            int currentLowForCopy0 = bounds[i][0] - shift;
+            int currentHighForCopy0 = bounds[i][1] - shift;
+            low = Math.max(low, currentLowForCopy0);
+            high = Math.min(high, currentHighForCopy0);
+            if (low > high) {
+                return 0;
+            }
+        }
+        
+        return high - low + 1;
+    }
+}
