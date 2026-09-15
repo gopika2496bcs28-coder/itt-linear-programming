@@ -1,0 +1,38 @@
+class Solution {
+    private static final int MOD = 1_000_000_007;
+    public int idealArrays(int n, int maxValue) {
+        long[][] comb = new long[n + 1][16];
+        for (int i = 0; i <= n; i++) {
+            comb[i][0] = 1;
+            for (int j = 1; j <= Math.min(i, 15); j++) {
+                comb[i][j] = (comb[i - 1][j - 1] + comb[i - 1][j]) % MOD;
+            }
+        }
+        long[][] dp = new long[maxValue + 1][15];
+        for (int i = 1; i <= maxValue; i++) {
+            dp[i][1] = 1;
+        }
+        for (int len = 1; len < 14; len++) {
+            for (int i = 1; i <= maxValue; i++) {
+                if (dp[i][len] == 0) continue;
+                for (int next = 2 * i; next <= maxValue; next += i) {
+                    dp[next][len + 1] = (dp[next][len + 1] + dp[i][len]) % MOD;
+                }
+            }
+        }
+        long totalIdealArrays = 0;
+        for (int i = 1; i <= maxValue; i++) {
+            for (int len = 1; len <= 14; len++) {
+                if (dp[i][len] == 0) continue;
+                long waysToStretch = comb[n - 1][len - 1];
+                long currentArrays = (dp[i][len] * waysToStretch) % MOD;
+                totalIdealArrays = (totalIdealArrays + currentArrays) % MOD;
+            }
+        }
+
+        return (int) totalIdealArrays;
+    }
+}
+
+
+ 
